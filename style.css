@@ -1,0 +1,471 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    /* Đặt một ảnh nền rừng cây tối màu từ Unsplash */
+    background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Phủ một lớp đen mờ lên toàn màn hình để dễ nhìn game hơn */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+/* NỀN MÀN HÌNH CHỜ: Kết hợp màu tối deep blue và lưới Cyber Grid chuyển động */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #05050d;
+    /* Tạo hiệu ứng lưới kỹ thuật số */
+    background-image:
+        linear-gradient(rgba(127, 0, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(127, 0, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+    animation: gridScroll 20s linear infinite;
+}
+
+@keyframes gridScroll {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 400px;
+    }
+}
+
+#start-screen.hidden {
+    display: none !important;
+}
+
+/* KHỐI GẠCH TETRIS BAY LƠ LỬNG PHÍA NỀN */
+.cube-deco {
+    position: absolute;
+    border: 3px solid rgba(0, 240, 255, 0.15);
+    background: rgba(0, 240, 255, 0.02);
+    border-radius: 6px;
+    animation: floatAndRotate 15s infinite ease-in-out;
+    z-index: 1;
+}
+
+/* Tạo dáng các khối gạch khác nhau */
+.deco-1 {
+    width: 60px;
+    height: 60px;
+    top: 15%;
+    left: 10%;
+    animation-duration: 18s;
+}
+
+.deco-2 {
+    width: 40px;
+    height: 120px;
+    bottom: 20%;
+    left: 15%;
+    border-color: rgba(255, 0, 127, 0.15);
+    animation-duration: 22s;
+    animation-delay: -3s;
+}
+
+.deco-3 {
+    width: 80px;
+    height: 40px;
+    top: 20%;
+    right: 12%;
+    border-color: rgba(127, 0, 255, 0.2);
+    animation-duration: 14s;
+}
+
+.deco-4 {
+    width: 60px;
+    height: 60px;
+    bottom: 15%;
+    right: 18%;
+    animation-duration: 25s;
+    animation-delay: -5s;
+}
+
+@keyframes floatAndRotate {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: translateY(-40px) rotate(180deg) scale(1.1);
+    }
+
+    100% {
+        transform: translateY(0) rotate(360deg) scale(1);
+    }
+}
+
+/* HỘP MENU CHÍNH (Glow Glassmorphism) */
+.start-box {
+    position: relative;
+    background: rgba(15, 15, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+    max-width: 420px;
+    width: 85%;
+    z-index: 10;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Vòng sáng Neon chạy ngầm dưới viền hộp */
+.box-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    box-shadow: 0 0 30px rgba(127, 0, 255, 0.2);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* TIÊU ĐỀ CHỮ GLITCH NEON */
+.start-box h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 8px;
+    margin: 0 0 8px 0;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    text-shadow:
+        -2px -2px 0 #ff007f,
+        2px 2px 0 #00f0ff;
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from {
+        text-shadow: -2px -2px 0 #ff007f, 2px 2px 0 #00f0ff, 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    to {
+        text-shadow: -3px -1px 0 #ff007f, 3px 1px 0 #00f0ff, 0 0 25px rgba(127, 0, 255, 0.6);
+    }
+}
+
+.start-box p {
+    color: #696984;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+}
+
+/* NÚT BẤM PHONG CÁCH ESPORTS */
+.mode-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menu-btn {
+    position: relative;
+    background: transparent;
+    color: #00f0ff;
+    border: 2px solid #00f0ff;
+    padding: 16px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.menu-btn span {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hiệu ứng đổ màu lấp đầy nút khi di chuột vào */
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #00f0ff, #7f00ff);
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+.menu-btn:hover:not(:disabled) {
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    border-color: transparent;
+}
+
+.menu-btn:hover:not(:disabled)::before {
+    left: 0;
+}
+
+/* Nút bị khóa (Coming soon) nhìn cho sang */
+.menu-btn.disabled {
+    border: 1px solid #22223b;
+    color: #4a4a6a;
+    cursor: not-allowed;
+}
+.game-wrapper {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+/* Các cột hai bên (HOLD và NEXT) */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+}
+
+.panel-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.canvas-box {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff;
+    /* Hiệu ứng vát góc dưới bên trái/phải giống ảnh */
+    border-radius: 0 0 15px 0;
+    padding: 5px;
+}
+
+.side-panel:first-child .canvas-box {
+    border-radius: 0 0 0 15px;
+}
+
+/* Bảng chơi chính giữa */
+.center-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.canvas-container {
+    background: rgba(0, 0, 0, 0.7);
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    padding: 2px;
+}
+
+canvas {
+    display: block;
+}
+
+/* Điểm số */
+.score-display {
+    margin-top: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* Hướng dẫn nút bấm */
+.controls {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: #ccc;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.controls b {
+    color: #fff;
+}
+.combo-text {
+    height: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f1c40f;
+    text-align: center;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px #000;
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+#game-over-screen.hidden {
+    display: none;
+}
+
+.game-over-box {
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #e74c3c;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.4);
+}
+
+.game-over-box h2 {
+    color: #e74c3c;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.game-over-box p {
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.game-over-box h3 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+#retry-btn {
+    background: #2980b9;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#retry-btn:hover {
+    background: #3498db;
+    transform: scale(1.05);
+}
+/* Căn chỉnh cụm nút Game Over nằm hàng ngang */
+.game-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Định dạng riêng cho nút Về Sảnh trong bảng Game Over */
+#gameover-lobby-btn {
+    background: #34495e;
+    /* Màu xanh đá trầm, sang trọng */
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    /* Bạn có thể chỉnh lại padding cho bằng nút RETRY cũ của bạn */
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Hiệu ứng tương tác nút Về Sảnh */
+#gameover-lobby-btn:hover {
+    background: #415b76;
+    transform: translateY(-2px);
+}
+
+#gameover-lobby-btn:active {
+    transform: translateY(0);
+}
+/* Khung chứa ngoài cùng - đảm bảo xếp hàng ngang và thẳng hàng */
+.control-cluster {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* Khoảng cách giữa 2 nút */
+    z-index: 100;
+}
+
+/* Class dùng chung cho cả 2 nút để đồng bộ 100% ngoại hình */
+.control-btn {
+    width: 46px;
+    /* Chiều rộng cố định */
+    height: 46px;
+    /* Chiều cao cố định */
+    background: rgba(40, 35, 45, 0.6);
+    /* Nền tối mờ giống nút Pause của bạn */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    /* Bo góc mượt mà */
+    color: #ffffff;
+    /* Ép icon SVG bên trong hiển thị màu trắng */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* Xóa padding mặc định để căn giữa chuẩn */
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Định kích thước cho icon SVG bên trong nút */
+.control-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* Hiệu ứng rê chuột vào (Hover) */
+.control-btn:hover {
+    background: rgba(60, 50, 70, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Hiệu ứng khi ấn nút (Active) */
+.control-btn:active {
+    transform: translateY(0);
+}

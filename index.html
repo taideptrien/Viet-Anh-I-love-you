@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetrio Style Web</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="start-screen">
+        <div class="cube-deco deco-1"></div>
+        <div class="cube-deco deco-2"></div>
+        <div class="cube-deco deco-3"></div>
+        <div class="cube-deco deco-4"></div>
+    
+        <div class="start-box">
+            <div class="box-glow"></div>
+            <h1>TETRIS</h1>
+            <p>CHỌN CHẾ ĐỘ CHƠI ĐỂ BẮT ĐẦU</p>
+    
+            <div class="mode-selection">
+                <button id="play-classic-btn" class="menu-btn">
+                    <span>CHẾ ĐỘ CỔ ĐIỂN</span>
+                </button>
+                <button class="menu-btn disabled" disabled>
+                    <span>GIỜI HẠN THỜI GIAN (COMING SOON)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="control-cluster">
+        <button id="pause-btn" class="control-btn" title="Tạm dừng (P)">
+            <svg id="pause-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+        </button>
+    
+        <button id="home-btn" class="control-btn" title="Về sảnh chờ">
+            <svg viewBox="0 0 24 24">
+                <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+        </button>
+    </div>
+    <div class="game-wrapper">
+        <div class="side-panel">
+            <div class="panel-header">HOLD</div>
+            <div class="canvas-box">
+                <canvas id="hold" width="80" height="80"></canvas>
+            </div>
+
+            <div class="controls">
+                <p><b>[ Space ]</b> Rơi thẳng</p>
+                <p><b>[ R ] / [ ↑ ]</b> Xoay</p>
+                <p><b>[ C ]</b> Giữ khối</p>
+            </div>
+        </div>
+
+        <div class="center-panel">
+            <div id="combo-display" class="combo-text"></div>
+        
+            <div class="canvas-container">
+                <canvas id="tetris" width="200" height="400"></canvas>
+            </div>
+            <div class="score-display">
+                <span id="score">0</span>
+            </div>
+        </div>
+        
+        <div id="game-over-screen" class="hidden">
+            <div class="game-over-box">
+                <h2>GAME OVER</h2>
+                <p>ĐIỂM SỐ</p>
+                <h3 id="final-score">0</h3>
+        
+                <div class="game-actions">
+                    <button id="retry-btn">RETRY</button>
+                    <button id="gameover-lobby-btn">VỀ SẢNH</button>
+                </div>
+            </div>
+        </div> 
+
+        <div class="side-panel">
+            <div class="panel-header">NEXT</div>
+            <div class="canvas-box">
+                <canvas id="next" width="80" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
