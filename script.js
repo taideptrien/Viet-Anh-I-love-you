@@ -9,7 +9,26 @@ nextContext.scale(20, 20);
 const holdCanvas = document.getElementById('hold');
 const holdContext = holdCanvas.getContext('2d');
 holdContext.scale(20, 20);
+// Cấu hình tốc độ và độ khó
+const INITIAL_SPEED = 1000;   // Tốc độ ban đầu: 1000ms (1 giây rơi 1 ô)
+const MAX_SPEED_LIMIT = 150;  // Tốc độ nhanh nhất: 150ms (Nhanh nữa là không kịp nhìn!)
+const SCORE_MILESTONE = 500;  // Cứ mỗi 500 điểm sẽ lên một cấp độ mới
+const SPEED_DECREMENT = 80;   // Mỗi cấp độ mới sẽ giảm 80ms thời gian chờ của gạch
 
+// Biến dropInterval hiện tại của bạn, hãy gán mặc định bằng INITIAL_SPEED
+let dropInterval = INITIAL_SPEED;
+function calculateDifficulty() {
+    if (typeof player === 'undefined' || typeof player.score === 'undefined') return;
+
+    // Lấy cấp độ hiện tại (Ví dụ: 0 - 499 điểm là cấp 0, 500 - 999 là cấp 1,...)
+    const currentLevel = Math.floor(player.score / SCORE_MILESTONE);
+
+    // Tính toán tốc độ rơi mới dựa trên cấp độ
+    const newInterval = INITIAL_SPEED - (currentLevel * SPEED_DECREMENT);
+
+    // Giới hạn tốc độ không được vượt quá mức tối đa (nhỏ hơn MAX_SPEED_LIMIT)
+    dropInterval = Math.max(newInterval, MAX_SPEED_LIMIT);
+}
 // Bảng màu giống TETR.IO
 const colors = [
     null,
@@ -263,6 +282,7 @@ function arenaSweep() {
 
 function updateScore() {
     document.getElementById('score').innerText = player.score;
+    calculateDifficulty();
     const comboEl = document.getElementById('combo-display');
     if (player.combo > 0) {
         comboEl.innerText = `COMBO x${player.combo}`;
@@ -297,7 +317,6 @@ document.addEventListener('keydown', event => {
 });
 
 let dropCounter = 0;
-let dropInterval = 1000;
 let lastTime = 0;
 
 function update(time = 0) {
@@ -349,36 +368,29 @@ document.getElementById('retry-btn').addEventListener('click', () => {
     update();
 });
 document.getElementById('play-classic-btn').addEventListener('click', () => {
-    // Ẩn màn hình chờ đi
     document.getElementById('start-screen').classList.add('hidden');
 
     if (!isGameStarted) {
-        // TRƯỜNG HỢP 1: TRẬN MỚI HOÀN TOÀN
         isGameStarted = true;
         isGameOver = false;
         isPaused = false;
+
+        // RESET TỐC ĐỘ VỀ BAN ĐẦU KHI CHƠI VÁN MỚI
+        dropInterval = INITIAL_SPEED;
 
         if (typeof arena !== 'undefined') arena.forEach(row => row.fill(0));
         if (typeof player !== 'undefined') {
             player.score = 0;
             playerReset();
         }
-        updateScore();
+        updateScore(); // Hàm này chạy sẽ tự gọi calculateDifficulty() để thiết lập lại
 
         lastTime = performance.now();
         update();
     } else {
-        // TRƯỜNG HỢP 2: TIẾP TỤC TRẬN ĐẤU (Quay lại từ nút Home)
-        isPaused = true; // MẸO: Giữ nguyên trạng thái PAUSE cơ!
-
-        // Cập nhật icon nút Pause thành hình chữ tam giác PLAY 
-        // để báo hiệu cho người chơi bấm vào đây để CHƠI TIẾP
+        isPaused = true;
         const pauseIcon = document.getElementById('pause-icon');
-        if (pauseIcon) {
-            pauseIcon.innerHTML = '<path fill="currentColor" d="M8 5v14l11-7z"/>';
-        }
-
-        // Vẽ lại bàn cờ một phát để màn hình hiện trạng thái đóng băng ngay lập tức
+        if (pauseIcon) pauseIcon.innerHTML = '<path fill="currentColor" d="M8 5v14l11-7z"/>';
         draw();
     }
 });
@@ -413,13 +425,13 @@ document.getElementById('home-btn').addEventListener('click', () => {
     }
 });
 document.getElementById('gameover-lobby-btn').addEventListener('click', () => {
-    isGameStarted = false; // Đánh dấu ván cũ đã kết thúc hoàn toàn
+    isGameStarted = false;
     isGameOver = false;
 
-    // Đổi chữ nút ngoài sảnh về lại mặc định ban đầu
-    document.getElementById('play-classic-btn').innerText = "CHẾ ĐỘ CỔ ĐIỂN";
+    // RESET TỐC ĐỘ VỀ MẶC ĐỊNH
+    dropInterval = INITIAL_SPEED;
 
-    // Ẩn hiện các màn hình
+    document.getElementById('play-classic-btn').innerText = "CHẾ ĐỘ CỔ ĐIỂN";
     document.getElementById('game-over-screen').classList.add('hidden');
     document.getElementById('start-screen').classList.remove('hidden');
 });
