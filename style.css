@@ -520,31 +520,111 @@ canvas {
     width: 100%;
 }
 
-/* Giao diện cho từng nút chọn phút */
-.time-btn {
-    flex: 1;
-    padding: 12px 0;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+/* Tiêu đề GIỚI HẠN THỜI GIAN đồng bộ 100% ngoại hình với nút Cổ Điển */
+/* TIÊU ĐỀ GIỚI HẠN THỜI GIAN - SAO CHÉP 100% HIỆU ỨNG NÚT CỔ ĐIỂN */
+.menu-subtitle {
+    position: relative;
+    background: transparent;
+    color: #00f0ff;
+    /* Màu xanh Cyan nguyên bản */
+    border: 2px solid #00f0ff;
+    /* Viền 2px giống menu-btn */
+    padding: 16px;
+    /* Khoảng đệm giống menu-btn */
+    font-size: 1.05rem;
+    /* Kích thước chữ giống menu-btn */
+    font-weight: 800;
+    /* Độ đậm chữ giống menu-btn */
+    letter-spacing: 2px;
+    /* Độ giãn chữ giống menu-btn */
+    border-radius: 12px;
+    /* Bo góc giống menu-btn */
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 16px;
+    cursor: pointer;
+    /* Biến con trỏ thành dạng click như nút bấm */
+    overflow: hidden;
+    /* Giữ hiệu ứng tràn màu nằm gọn bên trong khung */
+    transition: all 0.3s ease;
+    /* Gia tốc mượt mà */
+}
+
+/* Lớp nền Gradient chạy ngầm (Hiệu ứng giống hệt menu-btn::before) */
+.menu-subtitle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    /* Ban đầu giấu lớp màu sang bên trái */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #00f0ff, #7f00ff);
+    /* Dải màu giống Cổ Điển */
+    transition: all 0.4s ease;
+    /* Tốc độ trượt màu */
+    z-index: -1;
+    /* Đẩy ra sau chữ để không bị che mất chữ */
+}
+
+/* KHI DI CHUỘT VÀO (HOVER): Kích hoạt hiệu ứng bừng sáng như ảnh mẫu */
+.menu-subtitle:hover {
     color: #fff;
+    /* Chữ chuyển sang màu trắng rực rỡ */
+    border-color: transparent;
+    /* Ẩn viền thô đi */
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    /* Quầng sáng Neon lan tỏa giống ảnh 1f5aa1 */
+}
+
+/* Ép dải màu trượt từ trái qua phải lấp đầy khung */
+.menu-subtitle:hover::before {
+    left: 0;
+}
+
+/* Căn chỉnh hàng nút chọn thời gian nằm ngang */
+.time-attack-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Các nút bấm 2/3/5/10 MIN với khối nền tối nguyên bản */
+.time-btn {
+    background: #151518;
+    /* Giữ màu nền khối tối như cũ */
+    border: 1px solid #2d2d35;
+    /* Giữ viền xám mờ như cũ */
+    color: #ffffff;
+    /* Giữ màu chữ trắng như cũ */
+    padding: 10px 14px;
+    border-radius: 8px;
+    /* Tăng bo góc lên một chút cho mượt */
+    font-family: inherit;
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Hiệu ứng chuyển động mượt mà */
 }
 
-/* Hiệu ứng khi di chuột vào nút phút */
+/* Hiệu ứng Neon phát quang nhẹ và nổi khối khi di chuột (Hover) */
 .time-btn:hover {
-    background: #ff4757;
-    /* Màu đỏ kịch tính hợp với Time Attack */
-    border-color: #ff4757;
-    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+    background: #1e1e24;
+    color: #00f0ff;
+    /* Chữ chuyển sang màu xanh Cyan rực sáng */
+    border-color: #00f0ff;
+    /* Viền chuyển sang màu xanh Cyan */
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.45);
+    /* Đổ bóng Neon lan tỏa */
     transform: translateY(-2px);
+    /* Nhấc nhẹ nút lên tạo cảm giác nổi */
 }
 
+/* Hiệu ứng đàn hồi khi click chuột (Active) */
 .time-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.96);
+    /* Co nhỏ nhẹ lại khi bấm */
 }
 /* Khung hiển thị đồng hồ ở góc trên bên phải */
 #timer-display {
