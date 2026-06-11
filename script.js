@@ -93,6 +93,13 @@ function stopTimer() {
             }
             updateScore();
 
+            // --- THÊM ĐOẠN NÀY ĐỂ ĐỔI LẠI ICON NÚT PAUSE THÀNH 2 VẠCH ---
+            const pauseIcon = document.getElementById('pause-icon');
+            if (pauseIcon) {
+                pauseIcon.innerHTML = '<path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+            }
+            // --------------------------------------------------------
+
             startTimeAttack(mins);
 
             lastTime = performance.now();
@@ -447,6 +454,15 @@ document.getElementById('retry-btn').addEventListener('click', () => {
     holdPiece = null;
     canHold = true;
     isGameOver = false;
+
+    // --- THÊM ĐOẠN NÀY ĐỂ ÉP GAME CHẠY TIẾP VÀ ĐỔI ICON PAUSE ---
+    isPaused = false;
+    const pauseIcon = document.getElementById('pause-icon');
+    if (pauseIcon) {
+        pauseIcon.innerHTML = '<path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    }
+    // --------------------------------------------------------
+
     drawHold();
     playerReset();
     updateScore();
@@ -487,6 +503,10 @@ document.getElementById('play-classic-btn').addEventListener('click', () => {
             playerReset();
         }
         updateScore();
+        const pauseIcon = document.getElementById('pause-icon');
+        if (pauseIcon) {
+            pauseIcon.innerHTML = '<path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        }
 
         lastTime = performance.now();
         update();
