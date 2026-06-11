@@ -559,6 +559,9 @@ document.getElementById('game-replay-btn').addEventListener('click', () => {
     isGameStarted = true;
     isGameOver = false;
     isPaused = false;
+    holdPiece = null;        // Xóa khối gạch đang giữ ván trước
+    canHold = true;          // Kích hoạt lại quyền giữ gạch cho ván mới
+    if (typeof drawHold === 'function') drawHold();
 
     // 2. Reset tốc độ rơi về mức ban đầu (tránh việc giữ nguyên tốc độ nhanh của ván trước)
     if (typeof INITIAL_SPEED !== 'undefined') {
